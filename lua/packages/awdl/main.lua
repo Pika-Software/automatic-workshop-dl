@@ -1,8 +1,8 @@
 if (CLIENT) then return end
 
-module( "easy_workshop_dl", package.seeall )
+module( "automatic_workshop_dl", package.seeall )
 
-local logger = GPM.Logger( "Easy Workshop DL" )
+local logger = GPM.Logger( "Automatic Workshop DL" )
 
 local addon_count = 0
 function GetCount()
