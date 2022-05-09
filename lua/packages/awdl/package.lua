@@ -3,7 +3,7 @@ Description = "No more workshop content management, just install me :)"
 OnlyServer = true
 
 Author = "PrikolMen:-b"
-Version = "1.0.1"
+Version = "1.1.0"
 License = "MIT"
 
 Dependencies = {

@@ -22,6 +22,14 @@ do
     local ipairs = ipairs
     local game_MountGMA = game.MountGMA
 
+    local folders = {
+        "materials",
+        "particles",
+        "resource",
+        "models",
+        "sound"
+    }
+
     function Start()
         game_ready.wait(function()
             logger:info( "Beginning of the processing of server addons." )
@@ -36,18 +44,31 @@ do
                 local current_map = game.GetMap()
                 for num, addon in ipairs( addons ) do
                     if addon.downloaded and addon.mounted then
-                        if addon.tags:match( "map" ) then
-                            local ok, files = game_MountGMA( addon.file )
-                            if (ok) then
+                        local ok, files = game_MountGMA( addon.file )
+                        if (ok) then
+                            if addon.tags:match( "map" ) then
                                 for num, fl in ipairs( files ) do
                                     if fl:sub( #fl - 3, #fl ) == ".bsp" and fl:sub( 6, #fl - 4 ) == current_map then
                                         Add( addon, true )
                                         break
                                     end
                                 end
+                            else
+                                for num, fl in ipairs( files ) do
+
+                                    local have_resources = false
+                                    for num, folder in ipairs( folders ) do
+                                        if fl:StartWith( folder ) then
+                                            have_resources = true
+                                            Add( addon, false )
+                                            break
+                                        end
+                                    end
+
+                                    if (have_resources) then break end
+
+                                end
                             end
-                        else
-                            Add( addon, false )
                         end
                     end
                 end
