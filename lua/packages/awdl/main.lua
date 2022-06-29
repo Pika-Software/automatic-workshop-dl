@@ -34,6 +34,12 @@ do
         game_ready.wait(function()
             logger:info( "Beginning of the processing of server addons." )
 
+            if isfunction( resource.Clear ) then
+                logger:info( "Cleaning old downloadables..." )
+                resource.Clear()
+                logger:info( "Success!" )
+            end
+
             local addons = engine.GetAddons()
             local count = #addons
 
