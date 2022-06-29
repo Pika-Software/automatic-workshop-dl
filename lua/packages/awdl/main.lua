@@ -4,17 +4,18 @@ module( "automatic_workshop_dl", package.seeall )
 
 local logger = GPM.Logger( "Automatic Workshop DL" )
 
-local addon_count = 0
-function GetCount()
-    return addon_count
-end
-
 do
-    local resource_AddWorkshop = resource.AddWorkshop
-    function Add( addon, title )
-        addon_count = addon_count + 1
-        resource_AddWorkshop( addon.wsid )
+        
+    local addon_count = 0
+    function GetCount()
+        return addon_count
     end
+
+    function Add( addon )
+        addon_count = addon_count + 1
+        resource.AddWorkshop( addon.wsid )
+    end
+
 end
 
 do
@@ -27,7 +28,8 @@ do
         "particles",
         "resource",
         "models",
-        "sound"
+        "sound",
+        "maps"
     }
 
     function Start()
@@ -55,7 +57,7 @@ do
                             if addon.tags:match( "map" ) then
                                 for num, fl in ipairs( files ) do
                                     if fl:sub( #fl - 3, #fl ) == ".bsp" and fl:sub( 6, #fl - 4 ) == current_map then
-                                        Add( addon, true )
+                                        Add( addon )
                                         break
                                     end
                                 end
@@ -64,9 +66,9 @@ do
 
                                     local have_resources = false
                                     for num, folder in ipairs( folders ) do
-                                        if fl:StartWith( folder ) then
+                                        if fl:StartWith( folder .. "/" ) then
                                             have_resources = true
-                                            Add( addon, false )
+                                            Add( addon )
                                             break
                                         end
                                     end
