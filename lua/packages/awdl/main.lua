@@ -5,7 +5,7 @@ module( "automatic_workshop_dl", package.seeall )
 local logger = GPM.Logger( "Automatic Workshop DL" )
 
 do
-        
+
     local addon_count = 0
     function GetCount()
         return addon_count
