@@ -1,4 +1,8 @@
-import "https://raw.githubusercontent.com/Pika-Software/glua_extensions/main/glua_extensions.json"
+if file.Exists( "packages/glua_extensions/package.lua", "LUA" ) then
+    import "packages/glua_extensions"
+else
+    import "https://raw.githubusercontent.com/Pika-Software/glua_extensions/main/glua_extensions.json"
+end
 
 local game_GetAddonFiles = game.GetAddonFiles
 local string_StartsWith = string.StartsWith
