@@ -1,8 +1,8 @@
 -- GLua Extensions
-if file.Exists( "packages/glua_extensions/package.lua", "LUA" ) then
-    import "packages/glua_extensions"
+if file.Exists( "packages/glua-extensions/package.lua", "LUA" ) then
+    import "packages/glua-extensions"
 else
-    import "https://raw.githubusercontent.com/Pika-Software/glua_extensions_package/main/glua_extensions.json"
+    import "https://raw.githubusercontent.com/Pika-Software/glua-extensions/main/glua-extensions.json"
 end
 
 local game_GetAddonFiles = game.GetAddonFiles

@@ -1,7 +1,0 @@
-{
-  "name": "Automatic Workshop DL",
-  "files": {
-    "lua/packages/awdl/package.lua": "https://raw.githubusercontent.com/Pika-Software/awdl_package/main/lua/packages/awdl/package.lua",
-    "lua/packages/awdl/init.lua": "https://raw.githubusercontent.com/Pika-Software/awdl_package/main/lua/packages/awdl/init.lua"
-  }
-}
