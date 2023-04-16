@@ -1,9 +1,5 @@
 -- GLua Extensions
-if file.Exists( "packages/glua-extensions/package.lua", "LUA" ) then
-    import "packages/glua-extensions"
-else
-    import "https://raw.githubusercontent.com/Pika-Software/glua-extensions/main/glua-extensions.json"
-end
+import( Either( file.Exists( "packages/glua-extensions/package.lua", gpm.LuaRealm ), "packages/glua-extensions", "https://raw.githubusercontent.com/Pika-Software/glua-extensions/main/package.json" ) )
 
 local game_GetAddonFiles = game.GetAddonFiles
 local string_StartsWith = string.StartsWith
