@@ -1,7 +1,7 @@
 {
     "name": "automatic-workshop-dl",
     "files": {
-        "lua/packages/automatic-workshop-dl/package.lua": "",
-        "lua/packages/automatic-workshop-dl/init.lua": ""
+        "lua/packages/automatic-workshop-dl/package.lua": "https://raw.githubusercontent.com/Pika-Software/automatic-workshop-dl/main/lua/packages/automatic-workshop-dl/package.lua",
+        "lua/packages/automatic-workshop-dl/init.lua": "https://raw.githubusercontent.com/Pika-Software/automatic-workshop-dl/main/lua/packages/automatic-workshop-dl/init.lua"
     }
 }
