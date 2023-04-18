@@ -1,4 +1,4 @@
 name = "automatic-workshop-dl"
 main = "init.lua"
 client = false
-version = 3
+version = 4
