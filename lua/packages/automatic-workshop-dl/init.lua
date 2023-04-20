@@ -1,4 +1,4 @@
-import( file.Exists( "packages/glua-extensions/package.lua", gpm.LuaRealm ) and "packages/glua-extensions" or "https://raw.githubusercontent.com/Pika-Software/glua-extensions/main/package.json" )
+import( gpm.sources.lua.CanImport( "packages/glua-extensions" ) and "packages/glua-extensions" or "https://raw.githubusercontent.com/Pika-Software/glua-extensions/main/package.json" )
 
 local game_GetAddonFiles = game.GetAddonFiles
 local string_StartsWith = string.StartsWith
