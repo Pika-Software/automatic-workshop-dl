@@ -1,8 +1,9 @@
 import( gpm.LuaPackageExists( "packages/glua-extensions" ) and "packages/glua-extensions" or "https://raw.githubusercontent.com/Pika-Software/glua-extensions/main/package.json" )
 
+local resource_AddWorkshop = resource.AddWorkshop
 local game_GetAddonFiles = game.GetAddonFiles
-local string_StartsWith = string.StartsWith
 local logger = gpm.Logger
+local string = string
 local ipairs = ipairs
 
 local contentFolders = {
@@ -21,10 +22,27 @@ local addons = {}
 for _, addon in ipairs( engine.GetAddons() ) do
     if not addon.mounted then continue end
 
-    local hasContent = false
-    for _, filePath in ipairs( game_GetAddonFiles( addon.wsid ) ) do
-        if hasContent then break end
+    local files = game_GetAddonFiles( addon.wsid )
+    local blocked = false
 
+    for _, tag in ipairs( string.Split( addon.tags, "," ) ) do
+        if string.lower( tag ) == "map" then
+            local isCurrentMap = false
+            for _, filePath in ipairs( files ) do
+                if filePath ~= currentMap then continue end
+                isCurrentMap = true
+                break
+            end
+
+            blocked = not isCurrentMap
+            break
+        end
+    end
+
+    if blocked then continue end
+    local hasContent = false
+
+    for _, filePath in ipairs( files ) do
         if filePath == currentMap then
             addon.ismap = true
             hasContent = true
@@ -32,11 +50,10 @@ for _, addon in ipairs( engine.GetAddons() ) do
         end
 
         for _, folderName in ipairs( contentFolders ) do
-            if not string_StartsWith( filePath, folderName ) then continue end
+            if not string.StartsWith( filePath, folderName ) then continue end
             hasContent = true
             break
         end
-
     end
 
     if not hasContent then continue end
@@ -50,7 +67,6 @@ if count == 0 then
 end
 
 logger:Info( "Detected %s addons, processing...", count )
-local resource_AddWorkshop = resource.AddWorkshop
 
 for _, addon in ipairs( addons ) do
     resource_AddWorkshop( addon.wsid )
