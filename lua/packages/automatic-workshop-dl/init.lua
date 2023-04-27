@@ -6,14 +6,6 @@ local logger = gpm.Logger
 local string = string
 local ipairs = ipairs
 
-local contentFolders = {
-    "materials",
-    "particles",
-    "resource",
-    "models",
-    "sound"
-}
-
 logger:Info( "Beginning processing content from the Steam Workshop." )
 
 local currentMap = "maps/" .. game.GetMap() .. ".bsp"
@@ -49,11 +41,9 @@ for _, addon in ipairs( engine.GetAddons() ) do
             break
         end
 
-        for _, folderName in ipairs( contentFolders ) do
-            if not string.StartsWith( filePath, folderName ) then continue end
-            hasContent = true
-            break
-        end
+        if string.StartsWith( filePath, "lua" ) or string.match( filePath, "^maps/.+%.bsp" ) then continue end
+        hasContent = true
+        break
     end
 
     if not hasContent then continue end
