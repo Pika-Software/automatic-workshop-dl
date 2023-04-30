@@ -1,53 +1,42 @@
 import( gpm.LuaPackageExists( "packages/glua-extensions" ) and "packages/glua-extensions" or "https://raw.githubusercontent.com/Pika-Software/glua-extensions/main/package.json" )
 
 local resource_AddWorkshop = resource.AddWorkshop
-local game_GetAddonFiles = game.GetAddonFiles
 local logger = gpm.Logger
 local string = string
 local ipairs = ipairs
+local game = game
 
 logger:Info( "Beginning processing content from the Steam Workshop." )
 
-local currentMap = "maps/" .. game.GetMap() .. ".bsp"
+local mapExtensions = {
+    ["bsp"] = true,
+    ["nav"] = true,
+    ["ain"] = true
+}
+
+local currentMap = game.GetMap()
 local addons = {}
 
 for _, addon in ipairs( engine.GetAddons() ) do
     if not addon.mounted then continue end
 
-    local files = game_GetAddonFiles( addon.wsid )
-    local blocked = false
+    for _, filePath in ipairs( game.GetAddonFiles( addon.wsid ) ) do
+        local extension = string.GetExtensionFromFilename( filePath )
+        if extension == "lua" then continue end
 
-    for _, tag in ipairs( string.Split( addon.tags, "," ) ) do
-        if string.lower( tag ) == "map" then
-            local isCurrentMap = false
-            for _, filePath in ipairs( files ) do
-                if filePath ~= currentMap then continue end
-                isCurrentMap = true
+        if mapExtensions[ extension ] then
+            if string.Replace( string.GetFileFromFilename( filePath ), extension, "" ) == currentMap then
+                addons[ #addons + 1 ] = addon
+                addon.ismap = true
                 break
             end
 
-            blocked = not isCurrentMap
-            break
-        end
-    end
-
-    if blocked then continue end
-    local hasContent = false
-
-    for _, filePath in ipairs( files ) do
-        if filePath == currentMap then
-            addon.ismap = true
-            hasContent = true
-            break
+            continue
         end
 
-        if string.StartsWith( filePath, "lua" ) or string.match( filePath, "^maps/.+%.bsp" ) then continue end
-        hasContent = true
+        addons[ #addons + 1 ] = addon
         break
     end
-
-    if not hasContent then continue end
-    addons[ #addons + 1 ] = addon
 end
 
 local count = #addons
