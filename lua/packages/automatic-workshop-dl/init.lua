@@ -1,4 +1,4 @@
-import( gpm.LuaPackageExists( "packages/glua-extensions" ) and "packages/glua-extensions" or "https://github.com/Pika-Software/glua-extensions" )
+import( gpm.PackageExists( "packages/glua-extensions" ) and "packages/glua-extensions" or "https://github.com/Pika-Software/glua-extensions" )
 
 local resource_AddWorkshop = resource.AddWorkshop
 local logger = gpm.Logger
