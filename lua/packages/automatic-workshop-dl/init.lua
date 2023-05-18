@@ -20,6 +20,13 @@ local addons = {}
 for _, addon in ipairs( engine.GetAddons() ) do
     if not addon.mounted then continue end
 
+    local tags = {}
+    for _, tag in ipairs( string.Split( addon.tags, "," ) ) do
+        tags[ #tags + 1 ] = string.lower( tag )
+    end
+
+    local isMap = table.HasIValue( tags, "map" )
+
     for _, filePath in ipairs( game.GetAddonFiles( addon.wsid ) ) do
         local extension = string.GetExtensionFromFilename( filePath )
         if extension == "lua" then continue end
@@ -28,6 +35,10 @@ for _, addon in ipairs( engine.GetAddons() ) do
             if string.Replace( string.GetFileFromFilename( filePath ), extension, "" ) == currentMap then
                 addons[ #addons + 1 ] = addon
                 addon.ismap = true
+                break
+            end
+
+            if isMap then
                 break
             end
 
