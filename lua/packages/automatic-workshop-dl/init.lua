@@ -1,4 +1,4 @@
-require( "packages/glua-extensions", "https://github.com/Pika-Software/glua-extensions" )
+install( "packages/glua-extensions", "https://github.com/Pika-Software/glua-extensions" )
 
 local resource_AddWorkshop = resource.AddWorkshop
 local logger = gpm.Logger
