@@ -4,7 +4,7 @@ local resource_AddWorkshop = resource.AddWorkshop
 local logger = gpm.Logger
 local string = string
 local ipairs = ipairs
-local game = game
+local engine = engine
 
 logger:Info( "Beginning processing content from the Steam Workshop." )
 
@@ -27,7 +27,7 @@ for _, addon in ipairs( engine.GetAddons() ) do
 
     local isMap = table.HasIValue( tags, "map" )
 
-    for _, filePath in ipairs( game.GetAddonFiles( addon.wsid ) ) do
+    for _, filePath in ipairs( engine.GetAddonFiles( addon.wsid ) ) do
         local extension = string.GetExtensionFromFilename( filePath )
         if extension == "lua" then continue end
 
