@@ -8,3 +8,6 @@ Written in [Yuescript](https://github.com/pigpigyyy/Yuescript), compiled Lua cod
 
 ## ConVars
 - `awdl_ignore_maps` (def. 1) - If set to 1 will ignore any maps even if they contain content other than the current server map.
+
+## Console Messages
+![image](https://github.com/Pika-Software/automatic-workshop-dl/assets/44779902/79784f1c-23b6-4876-8b41-cf7d66302efb)
