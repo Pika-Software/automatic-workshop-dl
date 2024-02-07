@@ -1,10 +1,10 @@
 # Automatic Workshop DL
-No more workshop content management, just install me :)
+This addon automatically adds all active addons with content to WorkshopDL.
+In the case of maps, it will add the active map.
+Compatible with any game mode.
 
-## Description
-The addon automatically adds all active addons with content to the client download.
-In the case of maps it will add the active map.
-Compatible with any gamemode.
+## Where is Lua code?
+Written in [Yuescript](https://github.com/pigpigyyy/Yuescript), compiled Lua code can be found in [releases](https://github.com/Pika-Software/automatic-workshop-dl/releases) and [lua branch](https://github.com/Pika-Software/automatic-workshop-dl/tree/lua), or you can compile it yourself using compiled [Yuescript Compiler](https://github.com/pigpigyyy/Yuescript/releases/latest).
 
-## Package manager is required for the addon to work!
-[GLua Package Manager](https://github.com/Pika-Software/glua_package_manager)
+## ConVars
+- `awdl_ignore_maps` (def. 1) - If set to 1 will ignore any maps even if they contain content other than the current server map.

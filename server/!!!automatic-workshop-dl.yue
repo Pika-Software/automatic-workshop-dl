@@ -1,0 +1,157 @@
+if game.SinglePlayer!
+    return
+
+:lower, :Split, :StartsWith, :GetExtensionFromFilename = string
+:Exists, :Find = file
+resource = resource
+ipairs = ipairs
+
+workshopDL = resource.WorkshopDL
+unless istable( workshopDL )
+    workshopDL = {}
+    resource.WorkshopDL = workshopDL
+
+-- https://github.com/Facepunch/gmad/blob/master/include/AddonWhiteList.h
+resourceExtensions = {
+    -- Models
+    "mdl": true
+    "vtx": true
+    "phy": true
+    "ani": true
+    "vvd": true
+
+    -- Sounds
+    "wav": true
+    "mp3": true
+    "ogg": true
+
+    -- Materials & Textures
+    "vmt": true
+    "vtf": true
+    "png": true
+    "jpg": true
+    "jpeg": true
+    "raw": true
+
+    -- Fonts
+    "ttf": true
+
+    -- Animations
+    "ani": true
+
+    -- Particles
+    "pcf": true
+
+    -- Scenes
+    "vcd": true
+
+    -- Localization
+    "properties": true
+}
+
+getTag = nil
+do
+
+    tagNames = {
+        "gamemode": "Gamemode"
+        "map": "Map"
+        "weapon": "Weapon"
+        "vehicle": "Vehicle"
+        "npc": "NPC"
+        "entity": "Entity"
+        "tool": "Tool"
+        "effects": "Effect"
+        "model": "Model"
+        "servercontent": "Server Content"
+    }
+
+    getTag = ( addon ) ->
+        for _, tag in ipairs( Split( addon.tags, "," ) )
+            tag = tagNames[ lower( tag ) ]
+            if tag ~= nil
+                return tag
+
+        return "Addon"
+
+addCWorkshop = resource.AddCWorkshop
+unless addCWorkshop
+    addCWorkshop = resource.AddWorkshop
+    resource.AddCWorkshop = addCWorkshop
+
+addons = engine.GetAddons!
+addonsCount = #addons
+
+addWorkshop = nil
+do
+
+    MsgC = MsgC
+
+    color0 = Color( 200, 200, 200 )
+    color1 = Color( 180, 180, 180 )
+    color2 = Color( 20, 150, 240 )
+
+    addWorkshop = ( wsid ) ->
+        if workshopDL[ wsid ]
+            return
+
+        workshopDL[ wsid ] = true
+        addCWorkshop( wsid )
+        workshopDL[] = wsid
+
+        for index = 1, addonsCount
+            if addons[ index ].wsid == wsid
+                MsgC( color1, "[", color2, "WorkshopDL", color1, "] + ", color0, getTag( addons[ index ] ) .. ": ", color2, addons[ index ].title, color1, " ( ", color0, wsid, color1, " )\n" )
+                return
+
+        MsgC( color1, "[", color2, "WorkshopDL", color1, "] + ", color0, "Addon: ", color2, "unknown", color1, " ( ", color0, wsid, color1, " )\n" )
+
+    resource.AddWorkshop = addWorkshop
+
+scanAddon = ( gamePath, folderPath, result, length ) ->
+    if folderPath == nil
+        result, length = {}, 0
+
+        files, folders = Find( "*", gamePath )
+        for _, fileName in ipairs( files )
+            length += 1
+            result[ length ] = fileName
+
+        for _, folderName in ipairs( folders )
+            scanAddon( gamePath, folderName, result, length )
+
+        return result
+
+    files, folders = Find( folderPath .. "/*", gamePath )
+    for _, fileName in ipairs( files )
+        length += 1
+        result[ length ] = folderPath .. "/" .. fileName
+
+    for _, folderName in ipairs( folders )
+        scanAddon( gamePath, folderPath .. "/" .. folderName, result, length )
+
+    return result
+
+ignoreOtherMaps = CreateConVar( "awdl_ignore_maps", "1", bit.bor( FCVAR_ARCHIVE, FCVAR_DONTRECORD, FCVAR_NOTIFY ), "If enabled, WorkshopDL will ignore all maps except the current map." )
+mapName = game.GetMap!
+
+for i = 1, addonsCount
+    addon = addons[ i ]
+    unless addon.downloaded and addon.mounted
+        continue
+
+    if mapName ~= nil and Exists( "maps/" .. mapName .. ".bsp", addon.title )
+        addWorkshop( addon.wsid )
+        mapName = nil
+        continue
+
+    if ignoreOtherMaps\GetBool! and getTag( addon ) == "Map"
+        continue
+
+    if addon.models > 0
+        addWorkshop( addon.wsid )
+        continue
+
+    for _, filePath in ipairs( scanAddon( addon.title ) )
+        if StartsWith( filePath, "data_static/" ) or resourceExtensions[ GetExtensionFromFilename( filePath ) ]
+            addWorkshop( addon.wsid )
+            break
