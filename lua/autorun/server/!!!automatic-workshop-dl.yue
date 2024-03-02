@@ -6,10 +6,10 @@ if game.SinglePlayer!
 resource = resource
 ipairs = ipairs
 
-workshopDL = resource.WorkshopDL
+workshopDL = resource.AWDL
 unless istable( workshopDL )
     workshopDL = {}
-    resource.WorkshopDL = workshopDL
+    resource.AWDL = workshopDL
 
 -- https://github.com/Facepunch/gmad/blob/master/include/AddonWhiteList.h
 resourceExtensions = {
@@ -73,17 +73,13 @@ do
 
         return "Addon"
 
-addCWorkshop = resource.AddCWorkshop
-unless addCWorkshop
-    addCWorkshop = resource.AddWorkshop
-    resource.AddCWorkshop = addCWorkshop
-
 addons = engine.GetAddons!
 addonsCount = #addons
 
 addWorkshop = nil
 do
 
+    :AddWorkshop = resource
     MsgC = MsgC
 
     color0 = Color( 200, 200, 200 )
@@ -95,17 +91,15 @@ do
             return
 
         workshopDL[ wsid ] = true
-        addCWorkshop( wsid )
+        AddWorkshop( wsid )
         workshopDL[] = wsid
 
         for index = 1, addonsCount
             if addons[ index ].wsid == wsid
-                MsgC( color1, "[", color2, "WorkshopDL", color1, "] + ", color0, getTag( addons[ index ] ) .. ": ", color2, addons[ index ].title, color1, " ( ", color0, wsid, color1, " )\n" )
+                MsgC( color1, "[", color2, "AWDL", color1, "] + ", color0, getTag( addons[ index ] ) .. ": ", color2, addons[ index ].title, color1, " ( ", color0, wsid, color1, " )\n" )
                 return
 
-        MsgC( color1, "[", color2, "WorkshopDL", color1, "] + ", color0, "Addon: ", color2, "unknown", color1, " ( ", color0, wsid, color1, " )\n" )
-
-    resource.AddWorkshop = addWorkshop
+        MsgC( color1, "[", color2, "AWDL", color1, "] + ", color0, "Addon: ", color2, "unknown", color1, " ( ", color0, wsid, color1, " )\n" )
 
 scanAddon = ( gamePath, folderPath, result, length ) ->
     if folderPath == nil
@@ -131,7 +125,7 @@ scanAddon = ( gamePath, folderPath, result, length ) ->
 
     return result
 
-ignoreOtherMaps = CreateConVar( "awdl_ignore_maps", "1", bit.bor( FCVAR_ARCHIVE, FCVAR_DONTRECORD, FCVAR_NOTIFY ), "If enabled, WorkshopDL will ignore all maps except the current map." )
+ignoreOtherMaps = CreateConVar( "awdl_ignore_maps", "1", bit.bor( FCVAR_ARCHIVE, FCVAR_DONTRECORD, FCVAR_NOTIFY ), "If enabled, AWDL will ignore all maps except the current map." )
 mapName = game.GetMap!
 
 for i = 1, addonsCount
